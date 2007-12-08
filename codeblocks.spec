@@ -15,7 +15,7 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	zip
 BuildRequires:	dos2unix
 BuildRequires:  autoconf
-BuildRequires:  libwxgtku2.6-devel
+BuildRequires:  wxgtku2.6-devel
 
 %description
 Code::Blocks is a free C++ IDE built specifically to meet the most 
