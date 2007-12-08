@@ -5,8 +5,8 @@
 Name:		codeblocks
 Version:	1.0
 Release:	%mkrel 0.rc2.1
-Summary:	An open source, cross platform, free C++ IDE.
-Group:		Development/Tools/IDE
+Summary:	An open source, cross platform, free C++ IDE
+Group:		Development/Other
 License:	GPL
 URL:		http://www.codeblocks.org/
 Source:		%{name}-%{version}rc2.tar.bz2
