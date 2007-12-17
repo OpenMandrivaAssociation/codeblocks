@@ -11,7 +11,6 @@ License:	GPL
 URL:		http://www.codeblocks.org/
 Source:		%{name}-%{version}rc2.tar.bz2
 Patch0:		codeblocks-1.0rc2-fix-extraqualification.patch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	zip
 BuildRequires:	dos2unix
 BuildRequires:  autoconf
