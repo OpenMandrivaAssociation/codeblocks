@@ -3,19 +3,19 @@
 %define develname %mklibname -d %{name}
 
 Name:		codeblocks
-Version:	1.0
-Release:	%mkrel 0.rc2.1
+Version:	8.02
+Release:	%mkrel 0.1
 Summary:	An open source, cross platform, free C++ IDE
 Group:		Development/Other
 License:	GPL
 URL:		http://www.codeblocks.org/
-Source:		%{name}-%{version}rc2.tar.bz2
+Source:		%{name}-%{version}-src.tar.bz2
 Patch0:		codeblocks-1.0rc2-fix-extraqualification.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	zip
 BuildRequires:	dos2unix
 BuildRequires:  autoconf
-BuildRequires:  wxgtku2.6-devel
+BuildRequires:  wxgtku2.8-devel
 
 %description
 Code::Blocks is a free C++ IDE built specifically to meet the most 
@@ -150,8 +150,8 @@ Headers of %{name} for development.
 
 %prep
 
-%setup -n codeblocks-1.0rc2
-%patch0 -p0
+%setup -q
+#%patch0 -p0
 
 %build
 chmod a+x bootstrap acinclude.m4 src/update
