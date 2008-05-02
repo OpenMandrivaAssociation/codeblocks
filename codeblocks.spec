@@ -1,16 +1,16 @@
-%define libname_orig lib%{name}
-%define libname %mklibname %{name} 0
-%define develname %mklibname -d %{name}
+%define major		0
+%define libname_orig	lib%{name}
+%define libname		%mklibname %{name} 0
+%define develname	%mklibname -d %{name}
 
 Name:		codeblocks
 Version:	8.02
-Release:	%mkrel 0.1
-Summary:	An open source, cross platform, free C++ IDE
+Release:	%mkrel 1
+Summary:	A C++ IDE
 Group:		Development/Other
-License:	GPL
+License:	GPLv3
 URL:		http://www.codeblocks.org/
-Source:		%{name}-%{version}-src.tar.bz2
-Patch0:		codeblocks-1.0rc2-fix-extraqualification.patch
+Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.bz2
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	zip
 BuildRequires:	dos2unix
@@ -22,156 +22,81 @@ Code::Blocks is a free C++ IDE built specifically to meet the most
 demanding needs of its users. It was designed, right from the start, 
 to be extensible and configurable.
 Built around a plugin framework, Code::Blocks can be extended with 
-plugin DLLs. It includes a plugin wizard so you can compile your own plugins!
-
-Features:
-
-   Highlights:
-
-    * Open Source! GPL2, no hidden costs.
-    * Cross-platform. Runs on Linux or Windows (uses wxWidgets).
-    * Made in GNU C++. No interpreted languages or proprietary libs needed.
-    * Comes in two presentations: Standalone, and MinGW bundle
-    * Devpack support (optional)
-    * Extensible thru plugins (SDK available in the downloads section)
-
-  Compiler-related features:
-
-    * Multiple compiler support:
-       	  o GCC (MingW / Linux GCC)
-          o MSVC++
-          o Digital Mars
-          o Borland C++ 5.5
-          o Open Watcom
-    * Compiles directly or with makefiles
-    * Predefined project templates
-    * Custom template support
-    * Uses XML format for project files.
-    * Multi-target projects
-    * Workspaces support
-    * Imports MSVC projects and workspaces
-         (NOTE: assembly code and inter-project dependencies not supported yet)
-    * Imports Dev-C++ projects
-    * Integrates with GDB for debugging
- 
-  Interface Features:
-
-    * Syntax highlighting, customizable and extensible
-    * Code folding for C++ and XML files.
-    * Tabbed interface
-    * Code completion plugin
-    * Class Browser
-    * Smart indent
-    * One-key swap between .h and .c/.cpp files
-    * Open files list for quick switching between files (optional)
-    * External customizable "Tools"
-    * To-do list management with different users 
-%files
-%defattr(-,root,root)
-%doc README COPYING AUTHORS BUGS COMPILERS TODO NEWS ChangeLog
-%{_bindir}/codeblocks
-%{_bindir}/console_runner
-%{_datadir}/application-registry/codeblocks.applications
-%{_datadir}/applications/codeblocks.desktop
-%dir %{_datadir}/codeblocks
-%{_datadir}/codeblocks/*.zip
-%{_datadir}/codeblocks/*.txt
-%dir %{_datadir}/codeblocks/icons
-%{_datadir}/codeblocks/icons/*.ico
-%{_datadir}/codeblocks/icons/*.xpm
-%dir %{_datadir}/codeblocks/images
-%{_datadir}/codeblocks/images/*.png
-%dir %{_datadir}/codeblocks/images/16x16
-%{_datadir}/codeblocks/images/16x16/*.png
-%dir %{_datadir}/codeblocks/images/codecompletion
-%{_datadir}/codeblocks/images/codecompletion/*.png
-%dir %{_datadir}/codeblocks/lexers
-%{_datadir}/codeblocks/lexers/*.sample
-%{_datadir}/codeblocks/lexers/*.xml
-%dir %{_datadir}/codeblocks/plugins
-%{_datadir}/codeblocks/plugins/*.la
-%{_datadir}/codeblocks/plugins/*.so
-%dir %{_datadir}/codeblocks/templates
-%{_datadir}/codeblocks/templates/*.cpp
-%{_datadir}/codeblocks/templates/*.cbp
-%{_datadir}/codeblocks/templates/*.png
-%{_datadir}/codeblocks/templates/*.template
-%{_datadir}/codeblocks/templates/*.h
-%{_datadir}/codeblocks/templates/*.c
-%{_datadir}/codeblocks/templates/*.bmp
-%{_iconsdir}/gnome/48x48/mimetypes/gnome-mime-application-x-codeblocks.png
-%{_datadir}/mime-info/codeblocks.keys
-%{_datadir}/mime-info/codeblocks.mime
-%{_datadir}/mime/packages/codeblocks.xml
-%{_datadir}/pixmaps/codeblocks.png
-
-#--------------------------------------------------------------------
+plugin DLLs. It includes a plugin wizard so you can compile your own
+plugins!
 
 %package -n %{libname}
-Summary:        %name  library
-Group:          Graphical desktop/KDE
+Summary:        Shared library for %{name}
+Group:          System/Libraries
 Provides:       %{libname_orig} = %{version}-%{release}
-Requires:       %name = %version-%release
 
 %description -n %{libname}
-Library for %name
-
-%post -n %{libname} -p /sbin/ldconfig
-%postun -n %{libname} -p /sbin/ldconfig
-
-%files -n %{libname}
-%defattr(-,root,root)
-%{_libdir}/libcodeblocks.so.0
-%{_libdir}/libcodeblocks.so.0.0.1
-%{_libdir}/libwxscintilla.so.0
-%{_libdir}/libwxscintilla.so.0.0.1
-
-#--------------------------------------------------------------------
+Shared libraries for %{name}.
 
 %package -n %{develname}
-Summary:        Headers of %name for development
+Summary:        Development headers for %{name}
 Group:          Development/C
 Requires:       %{libname} = %{version}
 Provides:       %{name}-devel = %{version}-%{release}
 Provides:       %{libname_orig}-devel = %{version}-%{release}
 
 %description -n %{develname}
-Headers of %{name} for development.
-
-%files -n %{develname}
-%defattr(-,root,root)
-%{_libdir}/libcodeblocks.la
-%{_libdir}/libcodeblocks.so
-%{_libdir}/libwxscintilla.la
-%{_libdir}/libwxscintilla.so
-%{_libdir}/pkgconfig/codeblocks.pc
-
-#--------------------------------------------------------------------
+Development headers for %{name}.
 
 %prep
-
 %setup -q
-#%patch0 -p0
 
 %build
-chmod a+x bootstrap acinclude.m4 src/update
-dos2unix bootstrap acinclude.m4 codeblocks.pc.in configure.in Makefile.am
-
-# clean up files which cause confusion when switch versions of auto*
-rm -rf autom4te.cache
-
-# Fire up autotools
-libtoolize --force --copy && \
-        aclocal $ACLOCAL_FLAGS && \
-        autoheader && \
-        automake --include-deps --add-missing --foreign --copy && \
-        autoconf
-
-
-%configure
+%configure2_5x
 %make
 
 %install
-make DESTDIR=%buildroot install
+rm -rf %{buildroot}
+%makeinstall_std
+
+# icons
+mkdir -p %{buildroot}%{_iconsdir}/hicolor/{16x16,32x32,48x48}/apps
+convert -scale 48x48 src/setup/mime/codeblocks.png %{buildroot}%{_iconsdir}/hicolor/48x48/apps/%{name}.png
+convert -scale 32x32 src/setup/mime/codeblocks.png %{buildroot}%{_iconsdir}/hicolor/32x32/apps/%{name}.png
+convert -scale 16x16 src/setup/mime/codeblocks.png %{buildroot}%{_iconsdir}/hicolor/16x16/apps/%{name}.png
+
+%post
+%update_menus
+%update_icon_cache hicolor
+
+%postun
+%clean_menus
+%clean_icon_cache hicolor
+
+%post -n %{libname} -p /sbin/ldconfig
+
+%postun -n %{libname} -p /sbin/ldconfig
 
 %clean
+rm -rf %{buildroot}
+
+%files
+%defattr(-,root,root)
+%doc README AUTHORS BUGS COMPILERS TODO NEWS ChangeLog
+%{_bindir}/codeblocks
+%{_bindir}/cb_console_runner
+%{_bindir}/cb_share_config
+%{_mandir}/man1/*.1*
+%{_datadir}/applications/codeblocks.desktop
+%{_datadir}/%{name}
+%{_iconsdir}/gnome/48x48/mimetypes/gnome-mime-application-x-codeblocks.png
+%{_iconsdir}/gnome/48x48/mimetypes/gnome-mime-application-x-codeblocks-workspace.png
+%{_datadir}/mime/packages/codeblocks.xml
+%{_iconsdir}/hicolor/*/apps/%{name}.png
+%{_datadir}/pixmaps/codeblocks.png
+
+%files -n %{libname}
+%defattr(-,root,root)
+%{_libdir}/lib*.so.%{major}*
+
+%files -n %{develname}
+%defattr(-,root,root)
+%{_libdir}/*.*a
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/codeblocks.pc
+%{_includedir}/%{name}
