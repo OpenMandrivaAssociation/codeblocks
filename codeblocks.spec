@@ -16,6 +16,7 @@ BuildRequires:	zip
 BuildRequires:	dos2unix
 BuildRequires:  autoconf
 BuildRequires:  wxgtku2.8-devel
+BuildRequires:	ImageMagick
 
 %description
 Code::Blocks is a free C++ IDE built specifically to meet the most 
