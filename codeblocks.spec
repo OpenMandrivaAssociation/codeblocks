@@ -5,7 +5,7 @@
 
 Name:		codeblocks
 Version:	8.02
-Release:	%mkrel 2
+Release:	%mkrel 3
 Summary:	A C++ IDE
 Group:		Development/Other
 License:	GPLv3
