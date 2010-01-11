@@ -2,6 +2,9 @@
 %define libname_orig	lib%{name}
 %define libname		%mklibname %{name} 0
 %define develname	%mklibname -d %{name}
+%define	pkgdatadir	%{_datadir}/%{name}
+%define	pkglibdir	%{_libdir}/%{name}
+%define	plugindir	%{pkglibdir}/plugins
 
 Name:		codeblocks
 Version:	8.02
@@ -11,9 +14,20 @@ Group:		Development/Other
 License:	GPLv3
 URL:		http://www.codeblocks.org/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}-src.tar.bz2
+# Fedora packaging rules
+Patch1:         codeblocks-plugins.patch
+# update to recent standards + bug #487796 (http://developer.berlios.de/patch/?func=detailpatch&patch_id=2567&group_id=5358)
+Patch2:         codeblocks-desktop.patch
+# bug #461120 (http://developer.berlios.de/patch/?func=detailpatch&patch_id=2568&group_id=5358)
+Patch3:         codeblocks-run.patch
+# bug #469096 (fixed in upstream svn revision 5159)
+Patch4:         codeblocks-8.02-gcc-detect.patch
+# fix for gcc 4.4/glibc 2.9.90 http://developer.berlios.de/patch/index.php?func=detailpatch&patch_id=2699&group_id=5358
+Patch5:         codeblocks-drop-const.patch
+# fix GSocket conflict between glib >= 2.21 and wxGTK
+Patch6:         codeblocks-8.02-gsocket.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires:	zip
-BuildRequires:	dos2unix
 BuildRequires:  autoconf
 BuildRequires:  wxgtku2.8-devel
 BuildRequires:	imagemagick
@@ -46,14 +60,45 @@ Development headers for %{name}.
 
 %prep
 %setup -q
+%patch1 -p1
+%patch2 -p1
+%patch3 -p0 -b .run
+%patch4 -p0 -b .gcc-detect
+%patch5 -p1 -b .gcc44
+%patch6 -p1 -b .gsocket
+
+# fix the dir, where plugins are installed
+for p in astyle autosave classwizard codecompletion compilergcc debuggergdb defaultmimehandler openfileslist projectsimporter scriptedwizard todo xpmanifest
+do
+	sed -i 's|$(pkgdatadir)/plugins|@libdir@/@PACKAGE@/plugins|' src/plugins/$p/Makefile.*
+done
+
+for p in AutoVersioning BrowseTracker ThreadSearch byogames cb_koders codesnippets codestat dragscroll envvars help_plugin keybinder lib_finder profiler regex_testbed source_exporter symtab wxSmith wxSmithContribItems
+do
+	sed -i 's|$(pkgdatadir)/plugins|@libdir@/@PACKAGE@/plugins|' src/plugins/contrib/$p/Makefile.*
+done
+
+sed -i 's|$(pkgdatadir)/plugins|@libdir@/@PACKAGE@/plugins|' src/plugins/contrib/wxSmith/plugin/Makefile.*
+
+sed -i 's|@libdir@|%{_libdir}|' src/sdk/configmanager.cpp
+
+# remove execute bits from source files
+find src/plugins/contrib/regex_testbed -type f -exec chmod a-x {} ';'
+find src/plugins/compilergcc -type f -exec chmod a-x {} ';'
+
+# fix version inside the configure script
+sed -i 's/1\.0svn/%{version}/g' configure
 
 %build
-%configure2_5x
+%configure2_5x --with-contrib-plugins=all
+# Don't use rpath!
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %make
 
 %install
 rm -rf %{buildroot}
-%makeinstall_std
+%makeinstall_std INSTALL="/usr/bin/install -p"
 
 # icons
 mkdir -p %{buildroot}%{_iconsdir}/hicolor/{16x16,32x32,48x48}/apps
@@ -87,16 +132,13 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc README AUTHORS BUGS COMPILERS TODO NEWS ChangeLog
-%{_bindir}/codeblocks
-%{_bindir}/cb_console_runner
-%{_bindir}/cb_share_config
+%{_bindir}/*
+%{_libdir}/%{name}
 %{_mandir}/man1/*.1*
 %{_datadir}/applications/codeblocks.desktop
 %{_datadir}/%{name}
-%{_iconsdir}/gnome/48x48/mimetypes/gnome-mime-application-x-codeblocks.png
-%{_iconsdir}/gnome/48x48/mimetypes/gnome-mime-application-x-codeblocks-workspace.png
+%{_iconsdir}/*/*/*/*
 %{_datadir}/mime/packages/codeblocks.xml
-%{_iconsdir}/hicolor/*/apps/%{name}.png
 %{_datadir}/pixmaps/codeblocks.png
 
 %files -n %{libname}
