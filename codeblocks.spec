@@ -8,7 +8,7 @@
 
 Name:		codeblocks
 Version:	8.02
-Release:	%mkrel 3
+Release:	%mkrel 4
 Summary:	A C++ IDE
 Group:		Development/Other
 License:	GPLv3
@@ -31,6 +31,7 @@ BuildRequires:	zip
 BuildRequires:  autoconf
 BuildRequires:  wxgtku2.8-devel
 BuildRequires:	imagemagick
+Suggests:	gcc-c++
 
 %description
 Code::Blocks is a free C++ IDE built specifically to meet the most 
