@@ -2,9 +2,6 @@
 %define libname_orig	lib%{name}
 %define libname		%mklibname %{name} 0
 %define develname	%mklibname -d %{name}
-%define	pkgdatadir	%{_datadir}/%{name}
-%define	pkglibdir	%{_libdir}/%{name}
-%define	plugindir	%{pkglibdir}/plugins
 
 Name:		codeblocks
 Version:	10.05
