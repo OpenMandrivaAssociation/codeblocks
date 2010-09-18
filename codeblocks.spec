@@ -5,7 +5,7 @@
 
 Name:		codeblocks
 Version:	10.05
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	A C++ IDE
 Group:		Development/Other
 License:	GPLv3
