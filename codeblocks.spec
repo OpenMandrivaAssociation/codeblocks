@@ -7,7 +7,7 @@
 
 Name:		codeblocks
 Version:	13.12
-Release:	1
+Release:	2
 Summary:	A C++ IDE
 Group:		Development/Other
 License:	GPLv3
