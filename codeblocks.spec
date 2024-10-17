@@ -11,7 +11,7 @@ Release:	2
 Summary:	A C++ IDE
 Group:		Development/Other
 License:	GPLv3
-URL:		http://www.codeblocks.org/
+URL:		https://www.codeblocks.org/
 Source0:	http://sourceforge.net/projects/codeblocks/files/Sources/12.11/%{name}_%{version}-1.tar.gz
 Source1:	%{name}.png
 Source100:	%{name}.rpmlintrc
